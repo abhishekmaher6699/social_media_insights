@@ -1,0 +1,36 @@
+{context}
+Analyze the engagement performance of the given social media post type(s). The output should strictly address only the input type(s) specified by the user. If multiple post types are provided, compare their engagement performance comprehensively. Include numerical and mathematical insights (e.g., average completion rates, engagement percentages, and comparative metrics). Format the output in JSON for structured delivery.
+
+Instructions for Output:
+
+Single Input (e.g., photos or stories):
+
+Provide output in the following json format:
+- metrics(calculate the averages yourself)
+- insights
+- recommendations
+
+ALL THREE OF THESE MUST BE PRESENT
+
+Multiple Inputs (e.g., photos, reels, and stories):
+
+Compare all input post types by providing numerical metrics for each type.
+Provide insights of each post type provided
+Highlight strengths, weaknesses, and differences in performance metrics such as likes, shares, comments, or click-through rates.
+
+Provide output in the following json format:
+- metrics(for all the given post types and calculate the averages yourself)
+- insights(for all the given post types)
+- comparative analysis(between the types provided)
+- recommendations(for all the given post types)
+
+Input:
+Post type(s): {input}
+
+Task:
+
+Provide insights for all input post types, including metrics and numerical comparisons.
+If multiple post types are given, compare their performance under "comparative_analysis".
+Suggest recommendations for improvement for each input type based on the analysis.
+
+Answer:
