@@ -37,22 +37,24 @@ def hit_api(input_string):
 
 
 def evaluate_arithmetic_expressions(json_str):
-
     def replace_expression(match):
         expr = match.group(1)
         try:
             # Only allow basic arithmetic operations
             if not re.match(r'^[\d\s+*/()\.-]+$', expr):
                 return match.group(0)
-            result = eval(expr)
+            
+            # Remove any extra whitespace and ensure proper multiplication syntax
+            cleaned_expr = re.sub(r'\s+', '', expr)
+            
+            result = eval(cleaned_expr)
             # Format float results to 2 decimal places
             return str(round(result, 2)) if isinstance(result, float) else str(result)
         except:
             return match.group(0)
     
-    # Find and replace arithmetic expressions
-    # Matches expressions like "1234 + 5678" or "(1234 + 5678) / 2"
-    pattern = r'((?:\d+(?:\.\d+)?(?:\s*[+\-*/]\s*\d+(?:\.\d+)?)+(?:\s*\/\s*\d+(?:\.\d+)?)?)|(?:\(\d+(?:\.\d+)?(?:\s*[+\-*/]\s*\d+(?:\.\d+)?)+\)(?:\s*\/\s*\d+(?:\.\d+)?)?))'
+    # Updated pattern to better handle multiplication and nested parentheses
+    pattern = r'((?:\()*\d+(?:\.\d+)?(?:\s*[+\-*/]\s*(?:\()*\d+(?:\.\d+)?(?:\))*)+(?:\s*\/\s*\d+(?:\.\d+)?)?)'
     return re.sub(pattern, replace_expression, json_str)
 
 def parse_langflow_response(input_string):
