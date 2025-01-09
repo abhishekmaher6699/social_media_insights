@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
-data = pd.read_csv('./data/social_media_final_draft.csv')
+data = pd.read_csv('./src/data/social_media_final_draft.csv')
 
 st.set_page_config(
     page_title="Social Media Performance Dashboard",

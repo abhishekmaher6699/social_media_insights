@@ -109,7 +109,6 @@ def debug_print_response(api_response):
                 else:
                     print(" " * (indent + 2) + str(type(value)))
         
-        print_dict(api_response)
     except Exception as e:
         print(f"Error in debug printing: {str(e)}")
 
