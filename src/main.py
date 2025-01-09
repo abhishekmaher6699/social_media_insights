@@ -105,7 +105,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Create columns for better layout
-col1, col2, col3 = st.columns([1, 2, 1])
+col1, col2, col3 = st.columns([1, 4, 1])
 
 with col2:
     st.markdown("### 🎯 Select Content Types")
@@ -132,27 +132,46 @@ with col2:
     if st.button("Generate Insights 🚀", use_container_width=True):
         if selected_options:
             # Get data
-            response = get_data(selected_options)
+
+            with st.spinner("Fetching data... Please wait ⏳"):
+            # Get data
+                response = get_data(selected_options)
+                print(response)
             
-            # Metrics Section
             if "metrics" in response:
-                st.markdown("## 📈 Performance Metrics")
-                metric_cols = st.columns(len(selected_options))
+                st.markdown("## 📈 Performance Metrics (Average)")
                 
-                for idx, (key, metrics) in enumerate(response["metrics"].items()):
-                    if key.lower() in [opt.lower() for opt in selected_options]:
-                        with metric_cols[idx]:
+                # Define the maximum number of columns per row
+                max_columns_per_row = 3
+
+                # Create a list of all selected metrics to display
+                selected_metrics = [
+                    (key, metrics)
+                    for key, metrics in response["metrics"].items()
+                    if key.lower() in [opt.lower() for opt in selected_options]
+                ]
+                
+                # Group metrics into chunks of max_columns_per_row
+                for i in range(0, len(selected_metrics), max_columns_per_row):
+                    # Create a new row with the defined number of columns
+                    row_metrics = selected_metrics[i:i + max_columns_per_row]
+                    metric_cols = st.columns(len(row_metrics))
+                    
+                    # Display each metric in the respective column
+                    for col, (key, metrics) in zip(metric_cols, row_metrics):
+                        with col:
                             st.markdown(f"""
-                            <div class="metric-container">
-                                <h3>{key.capitalize()}</h3>
-                            </div>
+                                <h3 style="">{key.capitalize()}</h3>
                             """, unsafe_allow_html=True)
+                            
+                            # Loop through and display each metric
                             for metric, value in metrics.items():
                                 formatted_metric = metric.replace('_', ' ').title()
                                 if isinstance(value, (int, float)):
                                     st.metric(formatted_metric, f"{value:,.2f}")
                                 else:
                                     st.metric(formatted_metric, value)
+
 
             # Insights Section
             if "insights" in response:
@@ -175,7 +194,7 @@ with col2:
 
             # Recommendations
             if "recommendations" in response:
-                st.markdown("## 🎯 Recommendations")
+                st.markdown("## 🎯 Recommendations to increase engagement")
                 for key, recommendations in response["recommendations"].items():
                     if key.lower() in [opt.lower() for opt in selected_options]:
                         with st.expander(f"💡 {key.capitalize()} Recommendations", expanded=True):
